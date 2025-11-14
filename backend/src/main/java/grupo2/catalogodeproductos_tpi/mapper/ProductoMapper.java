@@ -2,61 +2,59 @@ package grupo2.catalogodeproductos_tpi.mapper;
 
 import grupo2.catalogodeproductos_tpi.dto.CreateProductoDTO;
 import grupo2.catalogodeproductos_tpi.dto.ProductoResponseDTO;
-import grupo2.catalogodeproductos_tpi.dto.UpdateProductoDTO;
+import grupo2.catalogodeproductos_tpi.dto.RatingDTO;
+import grupo2.catalogodeproductos_tpi.dto.StockDTO;
 import grupo2.catalogodeproductos_tpi.model.Producto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.MappingConstants;
 
 /**
- * Mapper para la entidad Producto.
+ * Interfaz de MapStruct para las conversiones de Producto.
  *
- * @Mapper(componentModel = "spring") - Genera un Bean de Spring.
- * * uses = CategoriaMapper.class - Le dice a MapStruct que puede usar
- * CategoriaMapper para convertir campos de tipo Categoria a CategoriaDTO.
- *
- * nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE -
- * Configuración CLAVE para el PATCH: si un campo en el DTO (fuente) es nulo,
- * NO se seteará en la entidad (destino).
+ * @Mapper(componentModel = "spring", uses = CategoriaMapper.class):
+ * 1. componentModel = "spring": Igual que antes, la genera como un Spring Bean.
+ * 2. uses = CategoriaMapper.class: ¡MUY IMPORTANTE!
+ * Le decimos a este mapper que, si en algún momento necesita
+ * convertir un objeto 'Categoria' a un 'CategoriaDTO' (o viceversa),
+ * DEBE USAR el 'CategoriaMapper' que ya definimos.
  */
-@Mapper(componentModel = "spring", 
-        uses = CategoriaMapper.class, 
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = CategoriaMapper.class)
 public interface ProductoMapper {
 
     /**
-     * Convierte la entidad Producto al DTO de respuesta detallada.
-     * @param producto La entidad JPA.
-     * @return El DTO de respuesta.
-     */
-    // "categoria" se mapea automáticamente a "categoria" (Categoria -> CategoriaDTO)
-    // usando el CategoriaMapper que declaramos en 'uses'.
-    @Mapping(target = "stock", ignore = true) // El stock se poblará manualmente desde el servicio.
-    @Mapping(target = "ratingPromedio", ignore = true) // Se poblará manualmente.
-    @Mapping(target = "ratingCantidad", ignore = true) // Se poblará manualmente.
-    ProductoResponseDTO toProductoResponseDTO(Producto producto);
-
-    /**
-     * Convierte el DTO de creación a la entidad Producto.
-     * @param dto El DTO con los datos para crear.
-     * @return La entidad JPA (aún no guardada).
-     */
-    @Mapping(target = "id", ignore = true) // Ignoramos ID (es nuevo)
-    @Mapping(target = "categoria", ignore = true) // La categoría se manejará manualmente en el servicio.
-    Producto toProducto(CreateProductoDTO dto);
-
-    /**
-     * Actualiza una entidad Producto existente con los datos de un UpdateProductoDTO.
-     * Este es el método usado para el PATCH.
-     * Gracias a 'NullValuePropertyMappingStrategy.IGNORE', solo los campos
-     * NO nulos en 'dto' se copiarán a 'producto'.
+     * Convierte un DTO de creación (CreateProductoDTO) a una entidad Producto.
      *
-     * @param dto El DTO con los campos a actualizar (puede tener nulos).
-     * @param producto La entidad JPA existente (cargada de la BD) que será modificada.
+     * Ignoramos 'id' (lo genera la BD), 'fechaCreacion' (lo genera @PrePersist)
+     * y 'categoria' (porque la buscamos y asignamos manualmente en el Servicio).
      */
-    @Mapping(target = "id", ignore = true) // Nunca actualizamos el ID.
-    @Mapping(target = "sku", ignore = true) // El SKU es inmutable, no se actualiza.
-    @Mapping(target = "categoria", ignore = true) // La categoría se actualiza a mano en el servicio.
-    void updateProductoFromDTO(UpdateProductoDTO dto, @MappingTarget Producto producto);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "fechaCreacion", ignore = true)
+    @Mapping(target = "categoria", ignore = true)
+    Producto toProducto(CreateProductoDTO createDTO);
+
+
+    /**
+     * Este es el mapper más complejo e importante.
+     * Combina TRES fuentes de datos (Producto, StockDTO, RatingDTO)
+     * en UN SOLO DTO de respuesta (ProductoResponseDTO).
+     *
+     * MapStruct se encarga de manejar si 'stockDTO' o 'ratingDTO' son nulos
+     * (en ese caso, los campos 'stock' o 'ratingPromedio' serán nulos en el JSON).
+     *
+     * @param producto La entidad Producto de nuestra BD.
+     * @param stockDTO El DTO del servicio de Inventario (puede ser null).
+     * @param ratingDTO El DTO del servicio de Reseñas (puede ser null).
+     * @return El DTO de respuesta combinado.
+     */
+    @Mapping(target = "sku", source = "producto.sku")
+    @Mapping(target = "nombre", source = "producto.nombre")
+    @Mapping(target = "descripcion", source = "producto.descripcion")
+    @Mapping(target = "precio", source = "producto.precio")
+    @Mapping(target = "categoria", source = "producto.categoria") // ¡Usa CategoriaMapper!
+    @Mapping(target = "fechaCreacion", source = "producto.fechaCreacion")
+    @Mapping(target = "stock", source = "stockDTO.disponibilidad") // Mapeo de Stock
+    @Mapping(target = "ratingPromedio", source = "ratingDTO.promedio") // Mapeo de Rating
+    @Mapping(target = "cantidadResenas", source = "ratingDTO.cantidad") // Mapeo de Rating
+    ProductoResponseDTO toProductoResponseDTO(Producto producto, StockDTO stockDTO, RatingDTO ratingDTO);
 }
