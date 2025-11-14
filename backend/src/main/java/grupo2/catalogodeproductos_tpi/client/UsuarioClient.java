@@ -40,7 +40,6 @@ public class UsuarioClient {
     public boolean validarToken(String apiKey){
 
         //Headers de la petición
-
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Api-Key", apiKey);
         headers.set("Content-Type", "application/json");
