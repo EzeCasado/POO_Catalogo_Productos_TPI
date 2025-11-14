@@ -1,4 +1,4 @@
-package main.java.grupo2.catalogodeproductos_tpi.model;
+package grupo2.catalogodeproductos_tpi.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
