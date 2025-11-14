@@ -1,4 +1,4 @@
-package main.java.grupo2.catalogodeproductos_tpi.repository;
+package grupo2.catalogodeproductos_tpi.repository;
 
 import grupo2.catalogodeproductos_tpi.model.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
