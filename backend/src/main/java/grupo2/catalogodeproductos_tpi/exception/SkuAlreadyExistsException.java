@@ -1,16 +1,17 @@
 package grupo2.catalogodeproductos_tpi.exception;
 
 /**
- * Excepción de runtime personalizada para señalar un intento de crear un recurso
- * que viola una restricción de unicidad (en este caso, el SKU).
+ * Excepción personalizada para errores 409 (Conflicto).
  *
- * Será capturada por el GlobalExceptionHandler para devolver un código HTTP 409 (Conflict).
+ * Se lanza cuando se intenta realizar una operación que viola
+ * una regla de negocio, como crear un recurso que ya existe.
+ * (Ej. POST /products con un SKU que ya está en la BD).
  */
 public class SkuAlreadyExistsException extends RuntimeException {
 
     /**
-     * Constructor que recibe el mensaje de error detallado.
-     * @param message El mensaje que describe el conflicto.
+     * Constructor que acepta un mensaje de error.
+     * @param message El mensaje que describe el conflicto (ej. "El SKU 'XYZ' ya existe.")
      */
     public SkuAlreadyExistsException(String message) {
         super(message);
