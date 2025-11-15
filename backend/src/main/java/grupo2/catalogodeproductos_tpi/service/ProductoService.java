@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Servicio para la lógica de negocio de los Productos.
@@ -132,6 +134,41 @@ public class ProductoService {
                 stockOpt.orElse(null),
                 ratingOpt.orElse(null)
         );
+    }
+
+    /**
+     * [Endpoint 2.2] Lógica para GET /products (Búsqueda y Filtrado)
+     * Busca productos en la BD local y luego enriquece cada uno
+     * con datos de las APIs de Inventario y Reseñas.
+     *
+     * @param nombre Filtro por nombre (opcional).
+     * @param categoriaId Filtro por ID de categoría (opcional).
+     * @return Lista de DTOs de respuesta, listos para el JSON.
+     */
+    @Transactional(readOnly = true)
+    public List<ProductoResponseDTO> buscarProductos(String nombre, Long categoriaId) {
+
+        // 1. Buscamos en nuestra BD usando el nuevo método del repositorio
+        List<Producto> productosBase = productoRepository.searchProducts(nombre, categoriaId);
+
+        // 2. Enriquecemos cada producto de la lista
+        return productosBase.stream()
+                .map(producto -> {
+                    // 3. Llamamos a los clientes externos para CADA producto
+                    // (Ojo: En un proyecto real, esto puede ser lento y se optimiza,
+                    // pero para el TPI es la arquitectura correcta de microservicios)
+
+                    Optional<StockDTO> stockOpt = inventarioClient.getStockPorSku(producto.getSku());
+                    Optional<RatingDTO> ratingOpt = resenasClient.getRatingDTO(producto.getSku());
+
+                    // 4. Mapeamos al DTO de respuesta final
+                    return productoMapper.toProductoResponseDTO(
+                            producto,
+                            stockOpt.orElse(null), // Pasa null al mapper si el Optional está vacío
+                            ratingOpt.orElse(null)
+                    );
+                })
+                .collect(Collectors.toList()); // Convertimos el Stream de vuelta a una Lista
     }
     
     // --- Métodos de Ayuda ---

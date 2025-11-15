@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Controlador REST para los endpoints de Productos.
  *
@@ -71,5 +73,24 @@ public class ProductoController {
         
         ProductoResponseDTO productoActualizado = productoService.actualizarProducto(sku, updateDto);
         return ResponseEntity.ok(productoActualizado);
+    }
+
+    // Dentro de la clase ProductoController.java
+
+    /**
+     * [Endpoint 2.2] GET /products (Búsqueda y Filtrado)
+     * Obtiene una lista de todos los productos, con filtros opcionales.
+     *
+     * @param nombre Filtro opcional por nombre (búsqueda parcial).
+     * @param categoriaId Filtro opcional por ID de categoría (búsqueda exacta).
+     * @return ResponseEntity con la lista de ProductoResponseDTO (200 OK).
+     */
+    @GetMapping
+    public ResponseEntity<List<ProductoResponseDTO>> searchProducts(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Long categoriaId) {
+
+        List<ProductoResponseDTO> productos = productoService.buscarProductos(nombre, categoriaId);
+        return ResponseEntity.ok(productos);
     }
 }
