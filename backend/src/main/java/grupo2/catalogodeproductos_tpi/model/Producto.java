@@ -33,6 +33,7 @@ public class Producto {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
 
+
     @Column(name = "fecha_creacion", updatable = false)
     private LocalDateTime fechaCreacion;
 

@@ -1,0 +1,28 @@
+{
+  "stock": [
+    {
+      "id": "SKU-001",
+      "sku": "SKU-001",
+      "disponibilidad": 50
+    },
+    {
+      "id": "SKU-002",
+      "sku": "SKU-002",
+      "disponibilidad": 10
+    }
+  ],
+  "rating": [
+    {
+      "id": "SKU-001",
+      "sku": "SKU-001",
+      "promedio": 4.5,
+      "cantidad": 25
+    },
+    {
+      "id": "SKU-002",
+      "sku": "SKU-002",
+      "promedio": 3.8,
+      "cantidad": 12
+    }
+  ]
+}
