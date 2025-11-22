@@ -33,7 +33,7 @@ public class ResenasClient {
      * - Si falla, devuelve Optional.empty().
      */
     public Optional<RatingDTO> getRatingDTO(String sku) { // Corregido a public
-        String url = RESENAS_API_URL + sku + "/rating";
+        String url = RESENAS_API_URL + sku ;
         try {
             RatingDTO respuesta = restTemplate.getForObject(url, RatingDTO.class);
             return Optional.ofNullable(respuesta);
