@@ -26,46 +26,17 @@ public class ProductoController {
 
     private final ProductoService productoService;
 
-    /**
-     * [Endpoint 2.1] POST /products (Crear Producto)
-     * Crea un nuevo producto en el catálogo.
-     *
-     * @param createDto El JSON del body, validado por @Valid.
-     * @return ResponseEntity con el ProductoResponseDTO creado (201 Created).
-     * Si el SKU ya existe, ProductoService lanzará SkuAlreadyExistsException,
-     * que GlobalExceptionHandler convertirá en un error 409 (Conflict).
-     */
     @PostMapping
     public ResponseEntity<ProductoResponseDTO> createProduct(@Valid @RequestBody CreateProductoDTO createDto) {
         ProductoResponseDTO nuevoProducto = productoService.crearProducto(createDto);
         return new ResponseEntity<>(nuevoProducto, HttpStatus.CREATED);
     }
 
-    /**
-     * [Endpoint 2.3] GET /products/{sku} (Detalle Producto)
-     * Obtiene la información detallada y combinada de un producto por su SKU.
-     *
-     * @param sku El SKU que viene en la URL.
-     * @return ResponseEntity con el ProductoResponseDTO (200 OK).
-     * Si no se encuentra, ProductoService lanzará ResourceNotFoundException
-     * (manejado por GlobalExceptionHandler, devuelve 404).
-     */
     @GetMapping("/{sku}")
     public ResponseEntity<ProductoResponseDTO> getProductBySku(@PathVariable String sku) {
-        ProductoResponseDTO producto = productoService.obtenerPorSku(sku);
-        return ResponseEntity.ok(producto);
+        return ResponseEntity.ok(productoService.obtenerPorSku(sku));
     }
 
-    /**
-     * [Endpoint 2.4] PATCH /products/{sku} (Actualizar Producto)
-     * Actualiza parcialmente la información de un producto.
-     *
-     * @PatchMapping Define que maneja peticiones PATCH.
-     *
-     * @param sku El SKU del producto a actualizar.
-     * @param updateDto El JSON del body, con los campos opcionales a cambiar.
-     * @return ResponseEntity con la vista actualizada del producto (200 OK).
-     */
     @PatchMapping("/{sku}")
     public ResponseEntity<ProductoResponseDTO> updateProduct(
             @PathVariable String sku,
