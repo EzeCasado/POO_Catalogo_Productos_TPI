@@ -1,28 +1,254 @@
 {
   "stock": [
     {
-      "id": "SKU-001",
-      "sku": "SKU-001",
+      "id": "ELEC-001",
+      "sku": "ELEC-001",
+      "disponibilidad": 65
+    },
+    {
+      "id": "ELEC-002",
+      "sku": "ELEC-002",
+      "disponibilidad": 84
+    },
+    {
+      "id": "ELEC-003",
+      "sku": "ELEC-003",
+      "disponibilidad": 0
+    },
+    {
+      "id": "ELEC-004",
+      "sku": "ELEC-004",
+      "disponibilidad": 79
+    },
+    {
+      "id": "ELEC-005",
+      "sku": "ELEC-005",
+      "disponibilidad": 82
+    },
+    {
+      "id": "HOG-001",
+      "sku": "HOG-001",
+      "disponibilidad": 41
+    },
+    {
+      "id": "HOG-002",
+      "sku": "HOG-002",
+      "disponibilidad": 14
+    },
+    {
+      "id": "HOG-003",
+      "sku": "HOG-003",
+      "disponibilidad": 19
+    },
+    {
+      "id": "HOG-004",
+      "sku": "HOG-004",
+      "disponibilidad": 43
+    },
+    {
+      "id": "HOG-005",
+      "sku": "HOG-005",
+      "disponibilidad": 5
+    },
+    {
+      "id": "ROPA-001",
+      "sku": "ROPA-001",
+      "disponibilidad": 64
+    },
+    {
+      "id": "ROPA-002",
+      "sku": "ROPA-002",
+      "disponibilidad": 53
+    },
+    {
+      "id": "ROPA-003",
+      "sku": "ROPA-003",
+      "disponibilidad": 79
+    },
+    {
+      "id": "ROPA-004",
+      "sku": "ROPA-004",
+      "disponibilidad": 51
+    },
+    {
+      "id": "ROPA-005",
+      "sku": "ROPA-005",
       "disponibilidad": 50
     },
     {
-      "id": "SKU-002",
-      "sku": "SKU-002",
-      "disponibilidad": 10
+      "id": "DEP-001",
+      "sku": "DEP-001",
+      "disponibilidad": 60
+    },
+    {
+      "id": "DEP-002",
+      "sku": "DEP-002",
+      "disponibilidad": 61
+    },
+    {
+      "id": "DEP-003",
+      "sku": "DEP-003",
+      "disponibilidad": 72
+    },
+    {
+      "id": "DEP-004",
+      "sku": "DEP-004",
+      "disponibilidad": 22
+    },
+    {
+      "id": "DEP-005",
+      "sku": "DEP-005",
+      "disponibilidad": 76
+    },
+    {
+      "id": "OLD-001",
+      "sku": "OLD-001",
+      "disponibilidad": 9
+    },
+    {
+      "id": "OLD-002",
+      "sku": "OLD-002",
+      "disponibilidad": 5
     }
   ],
   "rating": [
     {
-      "id": "SKU-001",
-      "sku": "SKU-001",
+      "id": "ELEC-001",
+      "sku": "ELEC-001",
       "promedio": 4.5,
-      "cantidad": 25
+      "cantidad": 265
     },
     {
-      "id": "SKU-002",
-      "sku": "SKU-002",
+      "id": "ELEC-002",
+      "sku": "ELEC-002",
+      "promedio": 4.8,
+      "cantidad": 179
+    },
+    {
+      "id": "ELEC-003",
+      "sku": "ELEC-003",
+      "promedio": 3.1,
+      "cantidad": 409
+    },
+    {
+      "id": "ELEC-004",
+      "sku": "ELEC-004",
       "promedio": 3.8,
-      "cantidad": 12
+      "cantidad": 75
+    },
+    {
+      "id": "ELEC-005",
+      "sku": "ELEC-005",
+      "promedio": 4,
+      "cantidad": 168
+    },
+    {
+      "id": "HOG-001",
+      "sku": "HOG-001",
+      "promedio": 4.6,
+      "cantidad": 357
+    },
+    {
+      "id": "HOG-002",
+      "sku": "HOG-002",
+      "promedio": 2.3,
+      "cantidad": 469
+    },
+    {
+      "id": "HOG-003",
+      "sku": "HOG-003",
+      "promedio": 4.9,
+      "cantidad": 163
+    },
+    {
+      "id": "HOG-004",
+      "sku": "HOG-004",
+      "promedio": 2.1,
+      "cantidad": 271
+    },
+    {
+      "id": "HOG-005",
+      "sku": "HOG-005",
+      "promedio": 3.6,
+      "cantidad": 302
+    },
+    {
+      "id": "ROPA-001",
+      "sku": "ROPA-001",
+      "promedio": 4,
+      "cantidad": 190
+    },
+    {
+      "id": "ROPA-002",
+      "sku": "ROPA-002",
+      "promedio": 3.7,
+      "cantidad": 362
+    },
+    {
+      "id": "ROPA-003",
+      "sku": "ROPA-003",
+      "promedio": 4.6,
+      "cantidad": 20
+    },
+    {
+      "id": "ROPA-004",
+      "sku": "ROPA-004",
+      "promedio": 3.3,
+      "cantidad": 157
+    },
+    {
+      "id": "ROPA-005",
+      "sku": "ROPA-005",
+      "promedio": 4.6,
+      "cantidad": 142
+    },
+    {
+      "id": "DEP-001",
+      "sku": "DEP-001",
+      "promedio": 4.7,
+      "cantidad": 276
+    },
+    {
+      "id": "DEP-002",
+      "sku": "DEP-002",
+      "promedio": 4.5,
+      "cantidad": 488
+    },
+    {
+      "id": "DEP-003",
+      "sku": "DEP-003",
+      "promedio": 3.9,
+      "cantidad": 138
+    },
+    {
+      "id": "DEP-004",
+      "sku": "DEP-004",
+      "promedio": 4.2,
+      "cantidad": 215
+    },
+    {
+      "id": "DEP-005",
+      "sku": "DEP-005",
+      "promedio": 3.3,
+      "cantidad": 465
+    },
+    {
+      "id": "OLD-001",
+      "sku": "OLD-001",
+      "promedio": 1.7,
+      "cantidad": 306
+    },
+    {
+      "id": "OLD-002",
+      "sku": "OLD-002",
+      "promedio": 2.6,
+      "cantidad": 176
+    }
+  ],
+  "validar": [
+    {
+      "id": "e460",
+      "servicio": "catalogo"
     }
   ]
 }

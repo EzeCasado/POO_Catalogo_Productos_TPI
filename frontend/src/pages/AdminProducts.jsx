@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// 1. Importamos las funciones nuevas para listar y eliminar
 import { getCategorias, crearProducto, getProductos, eliminarProducto } from '../api/adminApi';
 
 export default function AdminProducts() {
@@ -9,6 +8,10 @@ export default function AdminProducts() {
         nombre: '',
         descripcion: '',
         precio: '',
+        // --- NUEVOS CAMPOS EN EL ESTADO ---
+        peso: '',
+        dimensiones: '',
+        // ----------------------------------
         categoriaId: ''
     });
 
@@ -16,10 +19,10 @@ export default function AdminProducts() {
     const [apiKey, setApiKey] = useState('');
     const [mensaje, setMensaje] = useState('');
 
-    // 2. Nuevo Estado: Lista de productos para la tabla de Baja
+    // Estado para la lista de productos (tabla de baja)
     const [productos, setProductos] = useState([]);
 
-    // Carga inicial de datos (Categorías y Productos)
+    // Carga inicial de datos
     useEffect(() => {
         cargarDatosIniciales();
     }, []);
@@ -55,9 +58,12 @@ export default function AdminProducts() {
 
         if (respuesta.ok) {
             setMensaje(`¡Producto ${respuesta.data.nombre} creado con éxito!`);
-            // Limpiar formulario
-            setForm({ sku: '', nombre: '', descripcion: '', precio: '', categoriaId: '' });
-            // Recargar la lista de abajo para ver el nuevo producto
+            // Limpiar formulario (incluyendo los nuevos campos)
+            setForm({
+                sku: '', nombre: '', descripcion: '', precio: '',
+                peso: '', dimensiones: '', categoriaId: ''
+            });
+            // Recargar la lista de abajo
             cargarProductos();
         } else {
             setMensaje('Error al crear: ' + respuesta.error);
@@ -66,7 +72,6 @@ export default function AdminProducts() {
 
     // --- Lógica de BAJA (Eliminar) ---
     const handleEliminar = async (sku) => {
-        // Confirmación para evitar accidentes
         if (!window.confirm(`¿Seguro que querés eliminar el producto ${sku}?`)) return;
 
         if (!apiKey) {
@@ -78,7 +83,6 @@ export default function AdminProducts() {
 
         if (res.ok) {
             setMensaje(`Producto ${sku} eliminado correctamente.`);
-            // Recargar la lista para que desaparezca
             cargarProductos();
         } else {
             setMensaje('Error al eliminar: ' + res.error);
@@ -120,6 +124,30 @@ export default function AdminProducts() {
                         <label>Precio:</label>
                         <input type="number" name="precio" value={form.precio} onChange={handleChange} required step="0.01" style={{ padding: '5px' }} />
 
+                        {/* --- NUEVOS INPUTS --- */}
+                        <label>Peso (kg):</label>
+                        <input
+                            type="number"
+                            name="peso"
+                            value={form.peso}
+                            onChange={handleChange}
+                            required
+                            step="0.001"
+                            placeholder="Ej: 1.5"
+                            style={{ padding: '5px' }}
+                        />
+
+                        <label>Dimensiones (LxAxA):</label>
+                        <input
+                            type="text"
+                            name="dimensiones"
+                            value={form.dimensiones}
+                            onChange={handleChange}
+                            placeholder="Ej: 10x20x30 cm"
+                            style={{ padding: '5px' }}
+                        />
+                        {/* --------------------- */}
+
                         <label>Categoría:</label>
                         <select name="categoriaId" value={form.categoriaId} onChange={handleChange} required style={{ padding: '5px' }}>
                             <option value="">Seleccione una categoría...</option>
@@ -140,7 +168,7 @@ export default function AdminProducts() {
                 {/* SECCIÓN 2: LISTADO DE BAJA */}
                 <div style={{ flex: 1, minWidth: '400px' }}>
                     <h3>Listado de Productos (Baja)</h3>
-                    <div style={{ maxHeight: '500px', overflowY: 'auto', border: '1px solid #ccc' }}>
+                    <div style={{ maxHeight: '600px', overflowY: 'auto', border: '1px solid #ccc' }}>
                         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead style={{ position: 'sticky', top: 0, background: '#f8f9fa' }}>
                             <tr>

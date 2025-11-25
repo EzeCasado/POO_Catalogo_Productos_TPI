@@ -53,7 +53,7 @@ public class UsuarioClient {
 
             ResponseEntity  <String> response = restTemplate.postForEntity(USUARIO_API_URL, request, String.class);
 
-            return response.getStatusCode() == HttpStatus.OK;
+            return response.getStatusCode().is2xxSuccessful();
 
 
         } catch(Exception e){
