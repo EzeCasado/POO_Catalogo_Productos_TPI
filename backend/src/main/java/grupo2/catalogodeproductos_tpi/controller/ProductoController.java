@@ -46,6 +46,16 @@ public class ProductoController {
         return ResponseEntity.ok(productoActualizado);
     }
 
+    /**
+     * [Endpoint 2.X] DELETE /products/{sku}
+     * Realiza una baja lógica del producto (activo = false).
+     */
+    @DeleteMapping("/{sku}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable String sku) {
+        productoService.darDeBajaProducto(sku); // Llamamos a la lógica de Germán
+        return ResponseEntity.noContent().build();
+    }
+
     // Dentro de la clase ProductoController.java
 
     /**

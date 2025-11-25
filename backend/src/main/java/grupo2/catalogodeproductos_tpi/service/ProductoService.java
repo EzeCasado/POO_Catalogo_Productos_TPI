@@ -82,6 +82,32 @@ public class ProductoService {
     }
 
     /**
+     * [Endpoint 2.2] Lógica para GET /products (Búsqueda y Filtrado)
+     * Busca productos en la BD local y luego enriquece cada uno
+     * con datos de las APIs de Inventario y Reseñas.
+     */
+    @Transactional(readOnly = true)
+    public List<ProductoResponseDTO> buscarProductos(String nombre, Long categoriaId) {
+
+        // 1. Buscamos en nuestra BD usando el método searchProducts del repositorio
+        List<Producto> productosBase = productoRepository.searchProducts(nombre, categoriaId);
+
+        // 2. Enriquecemos cada producto de la lista con Stock y Rating
+        return productosBase.stream()
+                .map(producto -> {
+                    Optional<StockDTO> stockOpt = inventarioClient.getStockPorSku(producto.getSku());
+                    Optional<RatingDTO> ratingOpt = resenasClient.getRatingDTO(producto.getSku());
+
+                    return productoMapper.toProductoResponseDTO(
+                            producto,
+                            stockOpt.orElse(null),
+                            ratingOpt.orElse(null)
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+    /**
      * --- NUEVO MÉTODO ---
      * Da de baja un producto (Baja Lógica).
      * No borra el registro de la base de datos, solo pone activo = false.

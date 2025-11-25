@@ -62,7 +62,9 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
      * @return Una lista de Productos que coinciden con los filtros.
      */
     @Query("SELECT p FROM Producto p WHERE " +
+            "p.activo = true AND " + // <--- ¡ESTA ES LA LÍNEA CLAVE!
             "(:nombre IS NULL OR lower(p.nombre) LIKE lower(concat('%', :nombre, '%'))) AND " +
             "(:categoriaId IS NULL OR p.categoria.id = :categoriaId)")
-    List<Producto> searchProducts(@Param("nombre") String nombre, @Param("categoriaId") Long categoriaId);
+    List<Producto> searchProducts(@Param("nombre") String nombre,
+                                  @Param("categoriaId") Long categoriaId);
 }

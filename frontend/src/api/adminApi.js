@@ -66,15 +66,32 @@ export async function crearProducto(producto, apiKey) {
 }
 
 export async function actualizarProducto(sku, patchData, apiKey) {
-  try {
-    const payload = {
-      nombre: patchData.nombre?.trim(),
-      descripcion: patchData.descripcion?.trim(),
-      precio: Number(patchData.precio)
-    };
-    const res = await api.patch(`/products/${encodeURIComponent(sku)}`, payload, withApiKey(apiKey));
-    return { ok: true, data: res.data };
-  } catch (err) {
-    return handleError(err);
-  }
+    try {
+        const payload = {
+            nombre: patchData.nombre?.trim(),
+            descripcion: patchData.descripcion?.trim(),
+            precio: Number(patchData.precio)
+        };
+        const res = await api.patch(`/products/${encodeURIComponent(sku)}`, payload, withApiKey(apiKey));
+        return {ok: true, data: res.data};
+    } catch (err) {
+        return handleError(err);
+    }
+
 }
+
+  export async function eliminarProducto(sku, apiKey) {
+        try {
+            // Hacemos DELETE a /products/SKU
+            // Es CRÍTICO pasar la apiKey en los headers o el interceptor te rebota
+            const res = await api.delete(`/products/${encodeURIComponent(sku)}`, {
+                headers: { 'X-API-Key': apiKey }
+            });
+            return { ok: true, data: res.data };
+        } catch (err) {
+            return handleError(err);
+        }
+    }
+
+
+

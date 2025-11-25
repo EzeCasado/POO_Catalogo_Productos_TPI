@@ -36,6 +36,9 @@ public class Producto {
     @Column(nullable = false, precision = 10, scale = 3)
     private BigDecimal peso;
 
+    @Column(length = 50)
+    private String dimensiones;
+
     // --- NUEVO: Estado para Baja Lógica ---
     // true = Visible / false = Dado de baja
     @Column(nullable = false)
