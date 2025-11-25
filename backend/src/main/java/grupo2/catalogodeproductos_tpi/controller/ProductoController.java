@@ -10,6 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+/**
+ * Controlador REST para los endpoints de Productos.
+ *
+ * @RestController
+ * @RequestMapping("/products") Define la URL base (http://localhost:8080/products)
+ * @RequiredArgsConstructor Inyecta ProductoService.
+ */
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
@@ -37,15 +46,22 @@ public class ProductoController {
         return ResponseEntity.ok(productoActualizado);
     }
 
+    // Dentro de la clase ProductoController.java
+
     /**
-     * --- NUEVO ENDPOINT ---
-     * DELETE /products/{sku}
-     * Realiza una baja lógica del producto.
+     * [Endpoint 2.2] GET /products (Búsqueda y Filtrado)
+     * Obtiene una lista de todos los productos, con filtros opcionales.
+     *
+     * @param nombre Filtro opcional por nombre (búsqueda parcial).
+     * @param categoriaId Filtro opcional por ID de categoría (búsqueda exacta).
+     * @return ResponseEntity con la lista de ProductoResponseDTO (200 OK).
      */
-    @DeleteMapping("/{sku}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable String sku) {
-        productoService.darDeBajaProducto(sku);
-        // Devolvemos 204 No Content (es el estándar para un borrado exitoso)
-        return ResponseEntity.noContent().build();
+    @GetMapping
+    public ResponseEntity<List<ProductoResponseDTO>> searchProducts(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Long categoriaId) {
+
+        List<ProductoResponseDTO> productos = productoService.buscarProductos(nombre, categoriaId);
+        return ResponseEntity.ok(productos);
     }
 }

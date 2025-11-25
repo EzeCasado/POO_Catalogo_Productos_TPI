@@ -1,8 +1,12 @@
-package main.java.grupo2.catalogodeproductos_tpi.repository;
+package grupo2.catalogodeproductos_tpi.repository;
 
 import grupo2.catalogodeproductos_tpi.model.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -48,4 +52,17 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
      * @return true si un producto con ese SKU ya existe, false de lo contrario.
      */
     boolean existsBySku(String sku);
+
+    /**
+     * Busca productos filtrando opcionalmente por nombre (parcial) y/o categoría.
+     * Usa una consulta JPQL (lenguaje de consulta de JPA) para manejar los parámetros nulos.
+     *
+     * @param nombre El texto a buscar en el nombre del producto (parcial, ignora mayúsculas).
+     * @param categoriaId El ID de la categoría (exacto).
+     * @return Una lista de Productos que coinciden con los filtros.
+     */
+    @Query("SELECT p FROM Producto p WHERE " +
+            "(:nombre IS NULL OR lower(p.nombre) LIKE lower(concat('%', :nombre, '%'))) AND " +
+            "(:categoriaId IS NULL OR p.categoria.id = :categoriaId)")
+    List<Producto> searchProducts(@Param("nombre") String nombre, @Param("categoriaId") Long categoriaId);
 }

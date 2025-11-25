@@ -1,4 +1,4 @@
-package main.java.grupo2.catalogodeproductos_tpi.dto;
+package grupo2.catalogodeproductos_tpi.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package main.java.grupo2.catalogodeproductos_tpi.dto;
+package grupo2.catalogodeproductos_tpi.dto;
 
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;

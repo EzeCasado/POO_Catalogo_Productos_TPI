@@ -4,44 +4,39 @@ import grupo2.catalogodeproductos_tpi.dto.CategoriaDTO;
 import grupo2.catalogodeproductos_tpi.model.Categoria;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-
 import java.util.List;
 
 /**
- * Interfaz de MapStruct para convertir entre Categoria (Entidad) y CategoriaDTO (DTO).
+ * Interfaz de Mapper para MapStruct.
+ * Define las reglas de conversión entre la Entidad Categoria y su DTO CategoriaDTO.
  *
- * @Mapper(componentModel = "spring"):
- * 1. @Mapper: Le dice a MapStruct que esta es una interfaz de mapeo.
- * 2. componentModel = "spring": Le dice a MapStruct que genere una
- * implementación de esta interfaz que sea un "Spring Bean" (@Component).
- * Esto nos permite inyectarla (@Autowired o @RequiredArgsConstructor)
- * en nuestros Servicios.
+ * @Mapper(componentModel = "spring") le dice a MapStruct que genere una implementación
+ * de esta interfaz y la marque como un @Component de Spring, para poder inyectarla.
  */
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = "spring")
 public interface CategoriaMapper {
 
     /**
-     * Convierte una entidad Categoria (de la BD) a un CategoriaDTO (para el JSON).
+     * Convierte una entidad Categoria a un CategoriaDTO.
+     * @param categoria La entidad JPA.
+     * @return El DTO.
      */
     CategoriaDTO toCategoriaDTO(Categoria categoria);
 
     /**
-     * Convierte un CategoriaDTO (del JSON) a una entidad Categoria (para la BD).
-     *
-     * @Mapping(target = "id", ignore = true):
-     * Le decimos a MapStruct que al convertir de DTO a Entidad,
-     * ignore el campo "id". Esto es CRUCIAL para evitar errores
-     * cuando creamos una categoría nueva (ya que el DTO no trae ID
-     * o trae uno nulo, y la BD se encarga de generarlo).
+     * Convierte un CategoriaDTO a una entidad Categoria.
+     * @param dto El Data Transfer Object.
+     * @return La entidad JPA.
      */
-    @Mapping(target = "id", ignore = true)
-    Categoria toCategoria(CategoriaDTO categoriaDTO);
-    
+    @Mapping(target = "id", ignore = true) // Ignoramos el ID al crear una nueva entidad desde un DTO.
+    @Mapping(target = "productos", ignore = true) // No mapeamos la lista de productos al crear/actualizar una categoría.
+    Categoria toCategoria(CategoriaDTO dto);
+
     /**
-     * MapStruct es lo suficientemente inteligente para saber que si puede
-     * convertir una 'Categoria' a un 'CategoriaDTO', también puede
-     * convertir una 'List<Categoria>' a una 'List<CategoriaDTO>'.
+     * Convierte una lista de entidades Categoria a una lista de CategoriaDTO.
+     * MapStruct genera automáticamente el código para iterar la lista.
+     * @param categorias La lista de entidades.
+     * @return La lista de DTOs.
      */
     List<CategoriaDTO> toCategoriaDTOList(List<Categoria> categorias);
 }
