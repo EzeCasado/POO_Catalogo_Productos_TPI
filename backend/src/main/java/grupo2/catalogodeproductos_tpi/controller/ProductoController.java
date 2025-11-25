@@ -10,13 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Controlador REST para los endpoints de Productos.
- *
- * @RestController
- * @RequestMapping("/products") Define la URL base (http://localhost:8080/products)
- * @RequiredArgsConstructor Inyecta ProductoService.
- */
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
@@ -24,46 +17,17 @@ public class ProductoController {
 
     private final ProductoService productoService;
 
-    /**
-     * [Endpoint 2.1] POST /products (Crear Producto)
-     * Crea un nuevo producto en el catálogo.
-     *
-     * @param createDto El JSON del body, validado por @Valid.
-     * @return ResponseEntity con el ProductoResponseDTO creado (201 Created).
-     * Si el SKU ya existe, ProductoService lanzará SkuAlreadyExistsException,
-     * que GlobalExceptionHandler convertirá en un error 409 (Conflict).
-     */
     @PostMapping
     public ResponseEntity<ProductoResponseDTO> createProduct(@Valid @RequestBody CreateProductoDTO createDto) {
         ProductoResponseDTO nuevoProducto = productoService.crearProducto(createDto);
         return new ResponseEntity<>(nuevoProducto, HttpStatus.CREATED);
     }
 
-    /**
-     * [Endpoint 2.3] GET /products/{sku} (Detalle Producto)
-     * Obtiene la información detallada y combinada de un producto por su SKU.
-     *
-     * @param sku El SKU que viene en la URL.
-     * @return ResponseEntity con el ProductoResponseDTO (200 OK).
-     * Si no se encuentra, ProductoService lanzará ResourceNotFoundException
-     * (manejado por GlobalExceptionHandler, devuelve 404).
-     */
     @GetMapping("/{sku}")
     public ResponseEntity<ProductoResponseDTO> getProductBySku(@PathVariable String sku) {
-        ProductoResponseDTO producto = productoService.obtenerPorSku(sku);
-        return ResponseEntity.ok(producto);
+        return ResponseEntity.ok(productoService.obtenerPorSku(sku));
     }
 
-    /**
-     * [Endpoint 2.4] PATCH /products/{sku} (Actualizar Producto)
-     * Actualiza parcialmente la información de un producto.
-     *
-     * @PatchMapping Define que maneja peticiones PATCH.
-     *
-     * @param sku El SKU del producto a actualizar.
-     * @param updateDto El JSON del body, con los campos opcionales a cambiar.
-     * @return ResponseEntity con la vista actualizada del producto (200 OK).
-     */
     @PatchMapping("/{sku}")
     public ResponseEntity<ProductoResponseDTO> updateProduct(
             @PathVariable String sku,
@@ -71,5 +35,17 @@ public class ProductoController {
         
         ProductoResponseDTO productoActualizado = productoService.actualizarProducto(sku, updateDto);
         return ResponseEntity.ok(productoActualizado);
+    }
+
+    /**
+     * --- NUEVO ENDPOINT ---
+     * DELETE /products/{sku}
+     * Realiza una baja lógica del producto.
+     */
+    @DeleteMapping("/{sku}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable String sku) {
+        productoService.darDeBajaProducto(sku);
+        // Devolvemos 204 No Content (es el estándar para un borrado exitoso)
+        return ResponseEntity.noContent().build();
     }
 }

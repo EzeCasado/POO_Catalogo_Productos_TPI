@@ -1,14 +1,14 @@
 package main.java.grupo2.catalogodeproductos_tpi.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "productos", indexes = {
-    // Creamos un índice en 'sku' para que las búsquedas por SKU sean rapidísimas
     @Index(name = "idx_sku", columnList = "sku", unique = true)
 })
 @Data
@@ -32,15 +32,27 @@ public class Producto {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
 
-    // NOTA: El stock real no se guarda aquí, sino en el Módulo de Inventario.
-    // Este campo podría usarse como un 'stock reservado' o caché,
-    // pero para este TPI lo omitimos para no duplicar datos.
-    // @Column(nullable = false)
-    // private Integer stock;
+    // --- NUEVO: Peso en Kilogramos ---
+    @Column(nullable = false, precision = 10, scale = 3)
+    private BigDecimal peso;
 
-    // Relación: Muchos productos pueden pertenecer a UNA categoría.
-    // 'FetchType.LAZY' es crucial para no cargar la Categoría a menos que se necesite.
+    // --- NUEVO: Estado para Baja Lógica ---
+    // true = Visible / false = Dado de baja
+    @Column(nullable = false)
+    private Boolean activo = true; 
+
+    @Column(name = "fecha_creacion", nullable = false, updatable = false)
+    private LocalDateTime fechaCreacion;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
+
+    @PrePersist
+    protected void onCreate() {
+        this.fechaCreacion = LocalDateTime.now();
+        if (this.activo == null) {
+            this.activo = true; // Por defecto nace activo
+        }
+    }
 }
