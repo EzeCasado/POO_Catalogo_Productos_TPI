@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { getCategorias, crearProducto, getProductos, eliminarProducto } from '../api/adminApi';
 
+
+/**
+ * Pantalla de Administración de Productos.
+ * Responsabilidad:
+ * 1. Alta de productos (con validación de API Key).
+ * 2. Visualización y Baja de productos existentes.
+ * * NOTA: No usa Redux/Context para mantener la simplicidad, ya que el estado
+ * es estrictamente local a esta vista administrativa.
+ */
+
 export default function AdminProducts() {
-    // Estado del formulario de Alta
+
+    // Estado monolítico para el formulario.
+    // Facilita el reseteo completo (setForm(initialState)) tras un submit exitoso.
+
     const [form, setForm] = useState({
         sku: '',
         nombre: '',
@@ -15,8 +28,11 @@ export default function AdminProducts() {
         categoriaId: ''
     });
 
+    // Datos maestros y estado de sesión (API Key temporal)
     const [categorias, setCategorias] = useState([]);
     const [apiKey, setApiKey] = useState('');
+
+    // Feedback al usuario (éxito o error)
     const [mensaje, setMensaje] = useState('');
 
     // Estado para la lista de productos (tabla de baja)

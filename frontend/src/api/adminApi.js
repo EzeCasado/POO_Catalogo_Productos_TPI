@@ -1,13 +1,30 @@
 // src/api/adminApi.js
 import api from './apiClient';
 
+
+/**
+ * Normaliza la respuesta de error para evitar try/catch en los componentes visuales.
+ * Transforma errores de red (Axios) en un objeto estándar { ok: false, error: string }.
+ */
 function handleError(err) {
     return { ok: false, error: err.response?.data?.message || err.message };
 }
 
+
+/**
+ * Helper para inyectar la seguridad requerida por el backend administrativo.
+ * @param {string} apiKey - La llave del vendedor.
+ */
+
 function withApiKey(apiKey) {
     return { headers: { 'X-API-Key': apiKey } };
 }
+
+
+/**
+ * Obtiene el listado plano de categorías para poblar selectores.
+ * No requiere paginación por el momento (volumen de datos bajo).
+ */
 
 export async function getCategorias() {
     try {
@@ -48,6 +65,14 @@ export async function getProductoPorSku(sku) {
         return handleError(err);
     }
 }
+
+
+/**
+ * Orquesta la creación de un producto asegurando tipos de datos correctos.
+ * @param {Object} producto - DTO del formulario (strings crudos).
+ * @param {string} apiKey - Credencial de autorización.
+ * @returns {Promise<{ok: boolean, data?: Object, error?: string}>}
+ */
 
 export async function crearProducto(producto, apiKey) {
     try {
