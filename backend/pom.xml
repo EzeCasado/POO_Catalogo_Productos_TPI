@@ -3,12 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
-    <!-- 
-        BLOQUE MÁS IMPORTANTE:
-        Aqui le decimos a Maven que use Spring Boot como el "padre" del proyecto.
-        Usamos la version 3.3.1, que es una version publica y estable
-        que Maven SI puede encontrar y descargar.
-    -->
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -17,8 +12,8 @@
     </parent>
     
     <groupId>Grupo2</groupId>
-    <artifactId>CatalogoDeProductos_TPI</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>CatalogoDeProductos</artifactId>
+    <version>T</version>
     <name>CatalogoDeProductos_TPI</name>
     <description>CatalogoDeProductos_TPI</description>
     
